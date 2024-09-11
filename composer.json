@@ -1,0 +1,22 @@
+{
+    "name": "pst/testing",
+    "description": "PST (Peyton, Stacy, Timber) Testing",
+    "type": "library",
+    "license": "MIT",
+    "version": "7.4.33",
+    "autoload": {
+        "psr-4": {
+            "Pst\\Testing\\Tests\\": "tests/",
+            "Pst\\Testing\\": "src/"
+        },
+        "files": []
+    },
+    "authors": [
+        {
+            "name": "Jason Thompson"
+        }
+    ],
+    "require": {
+        "php": ">=7.4,<8.0"
+    }
+}

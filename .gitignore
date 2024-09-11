@@ -1,0 +1,19 @@
+
+# Composer dependencies
+/vendor/
+/composer.lock
+
+# Environment-specific files
+/.env
+/.env.*.local
+
+# Ignore editor and IDE files
+.vscode/
+.idea/
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.bak
