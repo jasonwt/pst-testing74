@@ -71,7 +71,7 @@ class TDDRunner {
                 if (preg_match('/\/\*\s*TDD\s*\*\//', $fileContents) === 0)
                     return;
                 
-                echo "Testing: '" . substr($path, strlen($this->rootPath), ) . "'\n";
+                echo "Testing: '" . substr($path, strlen($this->rootPath), ) . "': ";
 
                 include_once($path);
             } 

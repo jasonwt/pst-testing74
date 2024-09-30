@@ -8,6 +8,8 @@ use Exception;
 use Throwable;
 
 class ShouldException extends Exception {
+    
+
     public function __construct(string $message = "", int $code = 0, Throwable $previous = null) {
         $trace = $this->getTrace()[0];
         $message = "\n" . $trace["file"] . " [" . $trace["line"] . "]\n\n" . $message . "\n";

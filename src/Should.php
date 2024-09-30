@@ -21,6 +21,8 @@ use Throwable;
  * 
  */
 class Should {
+    public static int $testsRun = 0;
+
     private function __construct() {}
 
     
@@ -31,6 +33,7 @@ class Should {
     public static function executeTests(Closure $tests): void {
         try {
             $tests();
+            echo self::$testsRun . " tests passed without failure.\n";
 
         } catch (ShouldException $e) {
             self::dumpException($e);
@@ -38,6 +41,8 @@ class Should {
         } catch (Throwable $e) {
             throw $e;
         }
+
+        self::$testsRun = 0;
     }
 
 
@@ -55,6 +60,8 @@ class Should {
      * 
      */
     public static function be($expectedValue, ...$values): void {
+        self::$testsRun ++;
+
         foreach ($values as $k => $v)
             if ($expectedValue !== $v)
                 throw new ShouldException("[$k] expected value: '" . gettype($expectedValue) . "' is not " . gettype($v));
@@ -72,6 +79,8 @@ class Should {
      * 
      */
     public static function notBe($expectedValue, ...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $v)
             if ($expectedValue === $v)
                 throw new ShouldException("[$k] " . gettype($expectedValue) . " is " . gettype($v));
@@ -91,6 +100,8 @@ class Should {
      * 
      */
     public static function equal($expectedValue, ...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $v) {
             if ($expectedValue != $v) {
                 $valueOutput = is_object($expectedValue) ? (method_exists($expectedValue, "__toString") ? $expectedValue : print_r($expectedValue, true)) : $expectedValue;
@@ -113,6 +124,8 @@ class Should {
      * 
      */
     public static function notEqual($expectedValue, ...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $v) {
             if ($expectedValue == $v) {
                 throw new ShouldException("[$k] " . gettype($expectedValue) . ": '" . print_r($expectedValue, true) . "' is equal to " . gettype($v) . ": '" . print_r($v, true) . "'");
@@ -133,6 +146,8 @@ class Should {
      * 
      */
     public static function beTrue(bool ...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $value)
             if ($value !== true)
                 throw new ShouldException("[$k] " . gettype($value) . " is not true");
@@ -149,6 +164,8 @@ class Should {
      * 
      */
     public static function notBeTrue(bool ...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $value)
             if ($value === true)
                 throw new ShouldException("[$k] " . gettype($value) . " is true");
@@ -167,6 +184,8 @@ class Should {
      * 
      */
     public static function beFalse(bool ...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $value)
             if ($value !== false)
                 throw new ShouldException("[$k] " . gettype($value) . " is not false");
@@ -183,6 +202,8 @@ class Should {
      * 
      */
     public static function notBeFalse(bool ...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $value)
             if ($value === false)
                 throw new ShouldException("[$k] " . gettype($value) . " is false");
@@ -201,6 +222,8 @@ class Should {
      * 
      */
     public static function beNull(...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $value)
             if ($value !== null)
                 throw new ShouldException("[$k] " . gettype($value) . " is not null");
@@ -217,6 +240,8 @@ class Should {
      * 
      */
     public static function notBeNull(...$values): void {
+        self::$testsRun ++;
+        
         foreach ($values as $k => $value)
             if ($value === null)
                 throw new ShouldException("[$k] " . gettype($value) . " is null");
@@ -237,6 +262,8 @@ class Should {
      * 
      */
     public static function haveMethods(/*PHP8 string|object*/ $object, string ...$expectedMethods): void {
+        self::$testsRun ++;
+        
         if (is_object($object))
             $object = get_class($object);
         else if (!is_string($object))
@@ -267,6 +294,8 @@ class Should {
      * 
      */
     public static function notHaveMethods(/*PHP8 string|object*/ $object, string ...$expectedMethods): void {
+        self::$testsRun ++;
+        
         if (is_object($object))
             $object = get_class($object);
         else if (!is_string($object))
@@ -291,6 +320,8 @@ class Should {
      * 
      */
     public static function beA(/*PHP8 string|object*/ $object, string ...$expectedClasses): void {
+        self::$testsRun ++;
+        
         if (is_object($object))
             $object = get_class($object);
         else if (!is_string($object))
@@ -313,6 +344,8 @@ class Should {
      * 
      */
     public static function notBeA(/*PHP8 string|object*/ $object, string ...$expectedClasses): void {
+        self::$testsRun ++;
+        
         if (is_object($object))
             $object = get_class($object);
         else if (!is_string($object))
@@ -336,6 +369,8 @@ class Should {
      * 
      */
     public static function beAClass(string ...$classes): void {
+        self::$testsRun ++;
+        
         foreach ($classes as $k => $class)
             if (!class_exists((string) $class))
                 throw new ShouldException("[$k] Class '$class' does not exist");
@@ -352,6 +387,8 @@ class Should {
      * 
      */
     public static function notBeAClass(string ...$classes): void {
+        self::$testsRun ++;
+        
         foreach ($classes as $k => $class)
             if (class_exists((string) $class))
                 throw new ShouldException("[$k] Class '$class' exists");
@@ -370,6 +407,8 @@ class Should {
      * 
      */
     public static function beAnInterface(string ...$interfaces): void {
+        self::$testsRun ++;
+        
         foreach ($interfaces as $k => $interface)
             if (!interface_exists((string) $interface))
                 throw new ShouldException("[$k] Interface '$interface' does not exist");
@@ -386,6 +425,8 @@ class Should {
      * 
      */
     public static function notBeAnInterface(string ...$interfaces): void {
+        self::$testsRun ++;
+        
         foreach ($interfaces as $k => $interface)
             if (interface_exists((string) $interface))
                 throw new ShouldException("[$k] Interface '$interface' exists");
@@ -404,6 +445,8 @@ class Should {
      * 
      */
     public static function beATrait(string ...$traits): void {
+        self::$testsRun ++;
+        
         foreach ($traits as $k => $trait)
             if (!trait_exists((string) $trait))
                 throw new ShouldException("[$k] Trait '$trait' does not exist");
@@ -420,6 +463,8 @@ class Should {
      * 
      */
     public static function notBeATrait(string ...$traits): void {
+        self::$testsRun ++;
+        
         foreach ($traits as $k => $trait)
             if (trait_exists((string) $trait))
                 throw new ShouldException("[$k] Trait '$trait' exists");
@@ -439,6 +484,8 @@ class Should {
      * 
      */
     public static function beAnEnum(string ...$enums): void {
+        self::$testsRun ++;
+        
         if (PHP_VERSION_ID < 80100)
             throw new Exception("Enums are only supported in PHP 8.1 and later");
 
@@ -459,6 +506,8 @@ class Should {
      * 
      */
     public static function notBeAnEnum(string ...$enums): void {
+        self::$testsRun ++;
+        
         if (PHP_VERSION_ID < 80100)
             throw new Exception("Enums are only supported in PHP 8.1 and later");
 
@@ -481,6 +530,8 @@ class Should {
      * @throws ShouldException 
      */
     public static function haveTrait(/*PHP8 string|object*/ $object, string ...$traits): void {
+        self::$testsRun ++;
+        
         if (is_object($object))
             $object = get_class($object);
         else if (!is_string($object))
@@ -503,6 +554,8 @@ class Should {
      * @throws ShouldException 
      */
     public static function notHaveTrait(/*PHP8 string|object*/ $object, string ...$traits): void {
+        self::$testsRun ++;
+        
         if (is_object($object))
             $object = get_Class($object);
         else if (!is_string($object))
@@ -527,6 +580,8 @@ class Should {
      * 
      */
     public static function throw(string $exception, callable ...$callables): void {
+        self::$testsRun ++;
+        
         foreach ($callables as $k => $callable) {
             try {
                 $callable();
@@ -558,6 +613,8 @@ class Should {
      * 
      */
     public static function notThrow(string $exception, callable ...$callables): array {
+        self::$testsRun ++;
+        
         $results = [];
         foreach ($callables as $k => $callable) {
             try {
